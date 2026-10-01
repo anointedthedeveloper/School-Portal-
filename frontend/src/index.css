@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Defaults; overwritten at runtime from SchoolSettings. */
+  --brand: 30 64 175;
+  --brand-dark: 25 54 148;
+  --brand-soft: 233 237 247;
+  --accent: 15 118 110;
+  --accent-soft: 231 241 240;
+}
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; }
+  body { @apply bg-slate-50 text-slate-800 antialiased; }
+  :focus-visible { @apply outline-2 outline-offset-2 outline-brand; }
+}
+
+@layer components {
+  .input {
+    @apply block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm
+      placeholder:text-slate-400 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand
+      disabled:cursor-not-allowed disabled:bg-slate-100;
+  }
+}
