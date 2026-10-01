@@ -225,6 +225,15 @@ a breaking change is ever needed). Every response is `{ success, message, data }
   enabled in production for correct client IPs).
 * Frontend and API on different registrable domains? Set `COOKIE_SAME_SITE=none` (HTTPS required).
   Same site (e.g. `app.school.com` + `api.school.com`) works with the default `lax`.
+* **Deploying the backend to Vercel:** create a project with **Root Directory = `backend`**. `backend/api/index.ts`
+  and `backend/vercel.json` route every request to the Express app (no `listen()` on serverless). Set these
+  environment variables in the Vercel project (Production): `MONGODB_URI`, `JWT_SECRET`, `JWT_REFRESH_SECRET`,
+  `CLIENT_URL` (the exact frontend origin), and `COOKIE_SAME_SITE=none` if the frontend is on a different
+  `*.vercel.app` project (those are different sites, so a `lax` refresh cookie would not be sent). In MongoDB
+  Atlas → Network Access allow Vercel (`0.0.0.0/0`, since Vercel IPs are not fixed). If the deployment is
+  misconfigured the API answers `503 STARTUP_FAILED` and the real reason is in the function logs.
+  Note: rate limits are in-memory and therefore per serverless instance; use a shared store (e.g. Redis) before
+  relying on them at scale. Traditional hosts (Render, Railway, Fly.io) run `npm run build && npm start` unchanged.
 * Do **not** run the seed in production. Create the first admin through a one-off script or directly in the
   database with a bcrypt hash, then change settings through the UI.
 * Use a managed MongoDB (Atlas) with backups and IP allow-listing.

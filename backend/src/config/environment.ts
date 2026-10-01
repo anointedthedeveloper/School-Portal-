@@ -23,9 +23,9 @@ const source = Object.fromEntries(Object.entries(process.env).filter(([, v]) => 
 const parsed = schema.safeParse(source);
 if (!parsed.success) {
   const issues = parsed.error.issues.map((i) => `  - ${i.path.join('.')}: ${i.message}`).join('\n');
-  // Logger is not available yet (it depends on this config), so write directly.
-  console.error(`Invalid environment configuration:\n${issues}\nSee backend/.env.example`);
-  process.exit(1);
+  // Throw rather than exit so a serverless host can report the failure instead of dying silently.
+  // Logger is not available yet (it depends on this config), so the message carries the detail.
+  throw new Error(`Invalid environment configuration:\n${issues}\nSee backend/.env.example`);
 }
 
 const raw = parsed.data;
