@@ -219,6 +219,9 @@ a breaking change is ever needed). Every response is `{ success, message, data }
 
 * Build: `npm run build`. Run the API with `node backend/dist/server.js` (`NODE_ENV=production`).
   Serve `frontend/dist` as static files (nginx, Netlify, Vercel, S3…) with SPA fallback to `index.html`.
+* Vercel frontend: create a project with **Root Directory = `frontend`**, preset **Vite**. `frontend/vercel.json`
+  rewrites unknown paths to `index.html` so reloading a client-side route such as `/login` does not 404.
+  Other static hosts need the equivalent SPA fallback.
 * Set `VITE_API_URL` **at frontend build time** to the public API URL.
 * Production backend: strong unique `JWT_*` secrets, `CLIENT_URL` = the exact frontend origin(s),
   HTTPS everywhere (the refresh cookie becomes `Secure`), and run behind a reverse proxy (`trust proxy` is
