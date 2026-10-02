@@ -33,5 +33,6 @@ const raw = parsed.data;
 export const env = {
   ...raw,
   isProduction: raw.NODE_ENV === 'production',
-  clientOrigins: raw.CLIENT_URL.split(',').map((o) => o.trim()).filter(Boolean),
+  // Browsers send origins without a trailing slash, so strip it from configured values.
+  clientOrigins: raw.CLIENT_URL.split(',').map((o) => o.trim().replace(/\/+$/, '')).filter(Boolean),
 } as const;
